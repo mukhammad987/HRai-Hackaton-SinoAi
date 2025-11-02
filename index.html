@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR AI Assistant - Панель управления</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 35px 40px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-2xl);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.25em;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--gray-600);
+            font-size: 1em;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            padding: 28px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+            border-color: transparent;
+        }
+
+        .stat-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card h3 {
+            font-size: 2.75em;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            transition: all 0.4s;
+        }
+
+        .stat-card:hover h3,
+        .stat-card:hover p {
+            color: white;
+            -webkit-text-fill-color: white;
+        }
+
+        .stat-card p {
+            color: var(--gray-700);
+            font-size: 0.95em;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.4s;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-700);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            background: white;
+            border-color: var(--primary-light);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content h2 {
+            font-size: 1.75em;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 25px;
+            letter-spacing: -0.3px;
+        }
+
+        .card {
+            background: var(--gray-50);
+            padding: 28px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+        }
+
+        .card:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-xl);
+            background: white;
+            border-left-width: 8px;
+        }
+
+        .card h3 {
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            font-size: 1.35em;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .card p {
+            color: var(--gray-600);
+            margin: 8px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .card p strong {
+            color: var(--gray-800);
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .match-score {
+            font-size: 1.75em;
+            font-weight: 800;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 14px;
+            background: var(--gray-50);
+            display: inline-block;
+        }
+
+        .score-excellent { 
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .score-good { 
+            color: var(--info);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .score-fair { 
+            color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .score-poor { 
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .skill-tag {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--gray-800);
+            font-size: 14px;
+            letter-spacing: 0.2px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            background: var(--gray-50);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            color: var(--gray-500);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5em;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            font-size: 1em;
+            color: var(--gray-500);
+        }
+
+        .details-view {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 20px;
+            border: 2px solid var(--gray-200);
+            box-shadow: var(--shadow);
+        }
+
+        .details-view h4 {
+            color: var(--gray-900);
+            margin-bottom: 18px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .alert {
+            padding: 18px 22px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-left-color: var(--success);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-left-color: var(--danger);
+        }
+
+        .match-details {
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: 14px;
+            margin: 12px 0;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s;
+        }
+
+        .match-details:hover {
+            background: white;
+            box-shadow: var(--shadow-md);
+            transform: translateX(5px);
+        }
+
+        .match-details h4 {
+            color: var(--gray-900);
+            font-size: 1.15em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            header {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.75em;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+
+        .icon {
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">🤖</div>
+                <div>
+                    <h1>HR AI Assistant</h1>
+                    <p class="subtitle">Интеллектуальная система подбора персонала на основе AI</p>
+                </div>
+            </div>
+            
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <h3 id="stat-vacancies">-</h3>
+                    <p>Активных вакансий</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-candidates">-</h3>
+                    <p>Кандидатов</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="stat-matches">-</h3>
+                    <p>AI Подборок</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab(event, 'candidates')">
+                <span class="icon">👥</span> Кандидаты
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'vacancies')">
+                <span class="icon">💼</span> Вакансии
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'matches')">
+                <span class="icon">🎯</span> Все подборки
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'add-vacancy')">
+                <span class="icon">➕</span> Добавить вакансию
+            </button>
+        </div>
+
+        <div id="tab-candidates" class="tab-content active">
+            <h2>👥 Кандидаты</h2>
+            <div id="candidates-list" class="loading">Загрузка</div>
+        </div>
+
+        <div id="tab-vacancies" class="tab-content">
+            <h2>💼 Вакансии</h2>
+            <div id="vacancies-list" class="loading">Загрузка</div>
+        </div>
+
+        <div id="tab-matches" class="tab-content">
+            <h2>🎯 Все подборки AI</h2>
+            <div id="matches-list" class="loading">Загрузка</div>
+        </div>
+
+        <div id="tab-add-vacancy" class="tab-content">
+            <h2>➕ Добавить новую вакансию</h2>
+            <div id="form-message"></div>
+            <form id="vacancy-form">
+                <div class="form-group">
+                    <label>Название вакансии *</label>
+                    <input type="text" name="title" required placeholder="Например: Senior Python Developer">
+                </div>
+                <div class="form-group">
+                    <label>Компания</label>
+                    <input type="text" name="company" placeholder="Название компании">
+                </div>
+                <div class="form-group">
+                    <label>Локация</label>
+                    <input type="text" name="location" placeholder="Москва / Удаленно">
+                </div>
+                <div class="form-group">
+                    <label>Тип занятости</label>
+                    <select name="employment_type">
+                        <option>Полная занятость</option>
+                        <option>Частичная занятость</option>
+                        <option>Проектная работа</option>
+                        <option>Стажировка</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Описание вакансии *</label>
+                    <textarea name="description_text" required placeholder="Опишите обязанности, условия работы..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Требования</label>
+                    <textarea name="requirements_text" placeholder="Опишите требования к кандидату: навыки, опыт..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span class="icon">✅</span> Создать вакансию
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'candidates';
+
+        function showTab(event, tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.closest('.tab-btn').classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            
+            currentTab = tabName;
+            
+            if (tabName === 'candidates') loadCandidates();
+            if (tabName === 'vacancies') loadVacancies();
+            if (tabName === 'matches') loadMatches();
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('stat-vacancies').textContent = data.active_vacancies;
+                document.getElementById('stat-candidates').textContent = data.total_candidates;
+                document.getElementById('stat-matches').textContent = data.total_matches;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        async function loadCandidates() {
+            const container = document.getElementById('candidates-list');
+            container.innerHTML = '<div class="loading">Загрузка кандидатов</div>';
+            
+            try {
+                const response = await fetch('/api/candidates');
+                const candidates = await response.json();
+                
+                if (candidates.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><h3>Пока нет кандидатов</h3><p>Кандидаты появятся после отправки резюме через Telegram бот</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = candidates.map(c => `
+                    <div class="card">
+                        <h3>👤 ${c.name || 'Кандидат #' + c.id}</h3>
+                        <p><strong>Telegram ID:</strong> ${c.telegram_user_id || 'Не указан'}</p>
+                        <p><strong>Контакт:</strong> ${c.contact || 'Не указан'}</p>
+                        <p><strong>Дата:</strong> ${new Date(c.created_at).toLocaleString('ru-RU')}</p>
+                        <p><strong>Резюме:</strong> ${c.resume_text}</p>
+                        <button class="btn-view" onclick="viewCandidateMatches(${c.id})">
+                            <span class="icon">🎯</span> Показать подборки
+                        </button>
+                        <div id="candidate-matches-${c.id}"></div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-error">Ошибка загрузки кандидатов: ' + error.message + '</div>';
+            }
+        }
+
+        async function viewCandidateMatches(candidateId) {
+            const container = document.getElementById(`candidate-matches-${candidateId}`);
+            container.innerHTML = '<div class="loading">Загрузка подборок</div>';
+            
+            try {
+                const response = await fetch(`/api/candidates/${candidateId}/matches`);
+                const data = await response.json();
+                
+                if (data.matches.length === 0) {
+                    container.innerHTML = '<div class="details-view"><p>Нет подобранных вакансий</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = '<div class="details-view"><h4>🎯 Подобранные вакансии:</h4>' + 
+                    data.matches.map(m => {
+                        const scoreClass = m.match_score >= 70 ? 'score-excellent' : m.match_score >= 50 ? 'score-good' : m.match_score >= 30 ? 'score-fair' : 'score-poor';
+                        const scoreLabel = m.match_score >= 70 ? '🟢 Отличное' : m.match_score >= 50 ? '🟡 Хорошее' : m.match_score >= 30 ? '🟠 Частичное' : '🔴 Слабое';
+                        
+                        return `
+                            <div class="match-details">
+                                <h4>${m.vacancy.title}</h4>
+                                <p><strong>Компания:</strong> ${m.vacancy.company || 'Не указана'}</p>
+                                <p><strong>Локация:</strong> ${m.vacancy.location || 'Не указана'}</p>
+                                <div class="match-score ${scoreClass}">${m.match_score.toFixed(1)}% - ${scoreLabel}</div>
+                                <div><strong>Совпадающие навыки:</strong></div>
+                                <div class="skills-list">
+                                    ${m.matching_skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('') + '</div>';
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function loadVacancies() {
+            const container = document.getElementById('vacancies-list');
+            container.innerHTML = '<div class="loading">Загрузка вакансий</div>';
+            
+            try {
+                const response = await fetch('/api/vacancies?active_only=false');
+                const vacancies = await response.json();
+                
+                if (vacancies.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><h3>Нет вакансий</h3><p>Добавьте первую вакансию через форму</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = vacancies.map(v => `
+                    <div class="card">
+                        <h3>💼 ${v.title}</h3>
+                        <p><strong>Компания:</strong> ${v.company || 'Не указана'}</p>
+                        <p><strong>Локация:</strong> ${v.location || 'Не указана'}</p>
+                        <p><strong>Тип:</strong> ${v.employment_type || 'Не указан'}</p>
+                        <span class="badge ${v.is_active ? 'badge-success' : 'badge-warning'}">
+                            ${v.is_active ? '✅ Активна' : '⏸️ Неактивна'}
+                        </span>
+                        <p style="margin-top: 12px;"><strong>Описание:</strong> ${v.description_text}</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-error">Ошибка загрузки вакансий: ' + error.message + '</div>';
+            }
+        }
+
+        async function loadMatches() {
+            const container = document.getElementById('matches-list');
+            container.innerHTML = '<div class="loading">Загрузка подборок</div>';
+            
+            try {
+                const response = await fetch('/api/matches');
+                const matches = await response.json();
+                
+                if (matches.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><h3>Нет подборок</h3><p>Подборки появятся после того, как кандидаты отправят резюме</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = matches.map(m => {
+                    const scoreClass = m.match_score >= 70 ? 'score-excellent' : m.match_score >= 50 ? 'score-good' : m.match_score >= 30 ? 'score-fair' : 'score-poor';
+                    const scoreLabel = m.match_score >= 70 ? '🟢 Отличное' : m.match_score >= 50 ? '🟡 Хорошее' : m.match_score >= 30 ? '🟠 Частичное' : '🔴 Слабое';
+                    
+                    return `
+                        <div class="card">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 15px;">
+                                <div>
+                                    <h3>👤 ${m.candidate.name || 'Кандидат #' + m.candidate.id}</h3>
+                                    <p><strong>Контакт:</strong> ${m.candidate.contact || 'Не указан'}</p>
+                                    <p><strong>Резюме:</strong> ${m.candidate.resume_preview}</p>
+                                </div>
+                                <div>
+                                    <h3>💼 ${m.vacancy.title}</h3>
+                                    <p><strong>Компания:</strong> ${m.vacancy.company || 'Не указана'}</p>
+                                    <p><strong>Локация:</strong> ${m.vacancy.location || 'Не указана'}</p>
+                                </div>
+                            </div>
+                            <div class="match-score ${scoreClass}">
+                                📊 Соответствие: ${m.match_score.toFixed(1)}% - ${scoreLabel}
+                            </div>
+                            <div style="margin-top: 12px;"><strong>Совпадающие навыки:</strong></div>
+                            <div class="skills-list">
+                                ${m.matching_skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                            </div>
+                            <p style="margin-top: 15px; color: var(--gray-500); font-size: 13px;">
+                                <strong>Дата подбора:</strong> ${new Date(m.responded_at).toLocaleString('ru-RU')}
+                            </p>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-error">Ошибка загрузки подборок: ' + error.message + '</div>';
+            }
+        }
+
+        document.getElementById('vacancy-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {
+                title: formData.get('title'),
+                company: formData.get('company'),
+                location: formData.get('location'),
+                employment_type: formData.get('employment_type'),
+                description_text: formData.get('description_text'),
+                requirements_text: formData.get('requirements_text')
+            };
+            
+            const messageDiv = document.getElementById('form-message');
+            messageDiv.innerHTML = '<div class="loading">Создание вакансии</div>';
+            
+            try {
+                const response = await fetch('/api/vacancies', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    messageDiv.innerHTML = '<div class="alert alert-success">✅ Вакансия успешно создана! AI уже начал анализ подходящих кандидатов.</div>';
+                    e.target.reset();
+                    loadStats();
+                    setTimeout(() => {
+                        messageDiv.innerHTML = '';
+                    }, 5000);
+                } else {
+                    const error = await response.json();
+                    messageDiv.innerHTML = '<div class="alert alert-error">❌ Ошибка: ' + (error.detail || 'Не удалось создать вакансию') + '</div>';
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="alert alert-error">❌ Ошибка сети: ' + error.message + '</div>';
+            }
+        });
+
+        loadStats();
+        loadCandidates();
+
+        setInterval(loadStats, 30000);
+    </script>
+</body>
+</html>

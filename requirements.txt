@@ -1,0 +1,30 @@
+pdfplumber==0.11.0
+sentence-transformers==2.2.2
+scikit-learn==1.3.2
+torch==2.1.0
+transformers==4.34.0
+numpy>=1.24,<2
+colorama==0.4.6
+
+# Web Framework & Telegram Bot
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-telegram-bot==20.7
+python-multipart==0.0.6
+httpx~=0.25.2
+
+# Database
+psycopg2-binary==2.9.9
+sqlalchemy==2.0.25
+alembic==1.13.1
+
+# Background Tasks
+redis==5.0.1
+celery==5.3.4
+
+# Development dependencies
+reportlab>=4.0.0
+openai
+pydantic
+telegram
+openai
